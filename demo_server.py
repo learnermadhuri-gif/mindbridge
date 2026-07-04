@@ -8,6 +8,7 @@ from fastapi import FastAPI, Request
 from fastapi.responses import HTMLResponse
 from google.adk.runners import Runner
 from google.adk.sessions import InMemorySessionService
+from google.genai import types
 
 from app.agent import app as adk_app
 
@@ -47,7 +48,7 @@ async def run(request: Request):
     async for event in runner.run_async(
         user_id=user_id,
         session_id=session_id,
-        new_message=user_message,
+        new_message=types.Content(role="user", parts=[types.Part(text=user_message)]),
     ):
         if event.content and event.content.parts:
             for part in event.content.parts:
