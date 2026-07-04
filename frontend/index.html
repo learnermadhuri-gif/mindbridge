@@ -145,9 +145,19 @@
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ message: text, session_id: null })
         });
-        const data = await res.json();
+        const body = await res.text();
+        let data = {};
+        try {
+          data = JSON.parse(body);
+        } catch {
+          data = { response: body || 'Server error (check the terminal)' };
+        }
         chat.removeChild(typing);
-        append(data.response || '(no response)', 'agent');
+        if (!res.ok) {
+          append('Error: ' + (data.response || data.detail || body), 'agent');
+        } else {
+          append(data.response || '(no response)', 'agent');
+        }
       } catch (err) {
         chat.removeChild(typing);
         append('Error: ' + err.message, 'agent');

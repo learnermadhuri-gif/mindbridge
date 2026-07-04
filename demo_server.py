@@ -14,6 +14,11 @@ from app.agent import app as adk_app
 
 app = FastAPI(title="MindBridge Demo")
 
+if not os.environ.get("GOOGLE_API_KEY") and not os.environ.get("GOOGLE_CLOUD_PROJECT"):
+    raise RuntimeError(
+        "Set GOOGLE_API_KEY or GOOGLE_CLOUD_PROJECT before starting the server."
+    )
+
 SESSION_SERVICE = InMemorySessionService()
 ARTIFACT_SERVICE = None
 runner = Runner(
@@ -45,15 +50,20 @@ async def run(request: Request):
     )
 
     final_response = ""
-    async for event in runner.run_async(
-        user_id=user_id,
-        session_id=session_id,
-        new_message=types.Content(role="user", parts=[types.Part(text=user_message)]),
-    ):
-        if event.content and event.content.parts:
-            for part in event.content.parts:
-                if part.text:
-                    final_response = part.text
+    try:
+        async for event in runner.run_async(
+            user_id=user_id,
+            session_id=session_id,
+            new_message=types.Content(
+                role="user", parts=[types.Part(text=user_message)]
+            ),
+        ):
+            if event.content and event.content.parts:
+                for part in event.content.parts:
+                    if part.text:
+                        final_response = part.text
+    except Exception as e:
+        return {"response": "Server error: " + str(e), "session_id": session_id}
 
     return {"response": final_response, "session_id": session_id}
 
