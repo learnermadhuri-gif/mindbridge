@@ -5,7 +5,6 @@ import asyncio
 import json
 import os
 import sys
-import time
 from pathlib import Path
 
 from google import genai
@@ -107,7 +106,7 @@ async def main():
                     "response": f"[ERROR: {e}]",
                 }
             )
-        time.sleep(20)
+        await asyncio.sleep(20)
     print("Grading responses...")
     graded = []
     for r in responses:
@@ -117,7 +116,7 @@ async def main():
             graded.append(
                 {**r, "grade": {"score": 0, "explanation": f"Grading failed: {e}"}}
             )
-        time.sleep(20)
+        await asyncio.sleep(20)
 
     total = 0
     for item in graded:
