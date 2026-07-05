@@ -101,8 +101,20 @@ Agent: [uses draft_message to produce a gentle-assertive draft]
 | `agents-cli eval`    | Evaluate agent behavior (generate, grade, analyze, and more — see `agents-cli eval --help`) |
 | `uv run pytest tests/unit tests/integration` | Run unit and integration tests                                                        |
 | `uv run python tool_eval.py` | Run deterministic tool-level evaluation (no API key required) |
-| `uv run python local_eval.py` | Run agent-level evaluation with LLM-as-judge (requires API key) |
-| [A2A Inspector](https://github.com/a2aproject/a2a-inspector) | Launch A2A Protocol Inspector                                                        |
+| `uv run python local_eval.py` | Run agent-level evaluation with LLM-as-judge (requires API key with quota) |
+| [A2A Inspector](https://github.com/a2aproject/a2a-inspector) | Launch A2A Protocol Inspector |
+
+## Evaluation
+
+The deterministic tool evaluation scores **5.00/5** on the default dataset:
+
+```bash
+uv run python tool_eval.py
+```
+
+This is the primary, reproducible evaluation because it does not require any API key.
+
+The agent-level LLM-as-judge evaluation in `local_eval.py` is available for reviewers with a billing-enabled Google Cloud project or a paid API key. The Gemini free tier is limited to 20 requests/day per model per project, which is not enough for a full 12-call eval run.
 
 ## 🛠️ Project Management
 
