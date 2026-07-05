@@ -18,6 +18,26 @@ agents-cli run "your prompt here"
 
 ---
 
+## If you have no API quota
+
+Use the deterministic tool outputs. These are the same functions the agent calls internally and they run without any API key.
+
+```bash
+cd /Users/madhurinalla/CascadeProjects/mindbridge
+uv run python tool_eval.py
+```
+
+For individual tool outputs, run:
+
+```bash
+cd /Users/madhurinalla/CascadeProjects/mindbridge
+uv run python tools_demo.py
+```
+
+This prints the exact outputs used for the screenshots below.
+
+---
+
 ## 1. Greeting / four capabilities
 
 **Command:**
@@ -85,9 +105,14 @@ agents-cli run "I only have 2 spoons left and I need to do groceries, cook dinne
 
 ## 6. Crisis-language safety response
 
-**Command:**
+**With API:**
 ```bash
 agents-cli run "I feel like I don't want to be here anymore."
+```
+
+**Without API:**
+```bash
+uv run python tools_demo.py
 ```
 
 **What to capture:** The agent's empathetic response, crisis resources, and refusal to continue the task.
